@@ -1,0 +1,16 @@
+site_name: Flux Subsystem for Argo
+theme:
+  name: material
+  icon:
+    repo: fontawesome/brands/github 
+  palette: 
+    - scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate 
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+repo_url: https://github.com/flux-subsystem-argo/website
+repo_name: flux-subsystem-argo/website

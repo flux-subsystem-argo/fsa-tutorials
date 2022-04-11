@@ -12,5 +12,5 @@ theme:
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
-repo_url: https://github.com/flux-subsystem-argo/website
-repo_name: flux-subsystem-argo/website
+repo_url: https://github.com/flux-subsystem-argo/flamingo
+repo_name: flux-subsystem-argo/flamingo

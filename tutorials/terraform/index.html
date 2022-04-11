@@ -13,7 +13,7 @@
     
     
       
-        <title>Manage Terraform Resources - Flux Subsystem for Argo</title>
+        <title>GitOps Terraform Resources with Argo CD and Flux Subsystem for Argo - Flux Subsystem for Argo</title>
       
     
     
@@ -63,7 +63,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#manage-terraform-resources" class="md-skip">
+        <a href="#gitops-terraform-resources-with-argo-cd-and-flux-subsystem-for-argo" class="md-skip">
           Skip to content
         </a>
       
@@ -96,7 +96,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Manage Terraform Resources
+              GitOps Terraform Resources with Argo CD and Flux Subsystem for Argo
             
           </span>
         </div>
@@ -295,12 +295,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Manage Terraform Resources
+          GitOps Terraform Resources with Argo CD and Flux Subsystem for Argo
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Manage Terraform Resources
+        GitOps Terraform Resources with Argo CD and Flux Subsystem for Argo
       </a>
       
         
@@ -326,8 +326,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#tools" class="md-nav__link">
-    Tools
+  <a href="#tools-used-in-this-tutorial" class="md-nav__link">
+    Tools used in this tutorial
   </a>
   
 </li>
@@ -376,6 +376,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#install-flux" class="md-nav__link">
+    Install Flux
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#login-to-argo-cd-ui" class="md-nav__link">
     Login to Argo CD UI
   </a>
@@ -390,6 +397,20 @@
         <li class="md-nav__item">
   <a href="#install-weave-gitops-terraform-controller" class="md-nav__link">
     Install Weave GitOps Terraform Controller
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connect-to-a-terraform-gitops-repo" class="md-nav__link">
+    Connect to a Terraform GitOps repo
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    Summary
   </a>
   
 </li>
@@ -443,8 +464,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#tools" class="md-nav__link">
-    Tools
+  <a href="#tools-used-in-this-tutorial" class="md-nav__link">
+    Tools used in this tutorial
   </a>
   
 </li>
@@ -493,6 +514,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#install-flux" class="md-nav__link">
+    Install Flux
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#login-to-argo-cd-ui" class="md-nav__link">
     Login to Argo CD UI
   </a>
@@ -507,6 +535,20 @@
         <li class="md-nav__item">
   <a href="#install-weave-gitops-terraform-controller" class="md-nav__link">
     Install Weave GitOps Terraform Controller
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connect-to-a-terraform-gitops-repo" class="md-nav__link">
+    Connect to a Terraform GitOps repo
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    Summary
   </a>
   
 </li>
@@ -529,14 +571,14 @@
 
 
 
-<h1 id="manage-terraform-resources">Manage Terraform Resources</h1>
+<h1 id="gitops-terraform-resources-with-argo-cd-and-flux-subsystem-for-argo">GitOps Terraform Resources with Argo CD and Flux Subsystem for Argo</h1>
 <blockquote>
-<p>⏲️ Estimated time used: <em>10 minutes</em>.</p>
+<p>⏲️ Estimated time use: <em>12 minutes</em>.</p>
 </blockquote>
 <p>This is a tutorial to show how could we use <strong>Flux Subsystem for Argo</strong> to bring a Terraform manage feature from the Flux world to your <strong>Argo CD</strong> UI. In order to do so, we need <a href="https://github.com/weaveworks/tf-controller">Weave GitOps Terraform Controller</a> to help us reconcile our Terraform resources.</p>
 <h2 id="what-is-weave-gitops-terraform-controller">What is Weave GitOps Terraform Controller?</h2>
-<p>Weave GitOps Terraform Controller aka Weave TF-controller is a Kubernetes controller that allows you to GitOpsify Terraform resources without rewriting them to YAML files. We can use Weave TF-controller in any GitOps environment managed by Flux or Argo CD. In case of this tutorial, We use FSA to help bring Weave TF-controller to Argo CD.</p>
-<h2 id="tools">Tools</h2>
+<p><strong>Weave GitOps Terraform Controller</strong> aka <strong>Weave TF-controller</strong> is a Kubernetes controller that allows you to GitOpsify Terraform resources without rewriting them to YAML files. We can use Weave TF-controller in any GitOps environment managed by Flux or Argo CD. In case of this tutorial, We use FSA to help bring Weave TF-controller to Argo CD.</p>
+<h2 id="tools-used-in-this-tutorial">Tools used in this tutorial</h2>
 <p>We use the following tools in this tutorial.</p>
 <ul>
 <li>A Kubernetes cluster. EKS on AWS, or <code>kind</code> on your desktop.</li>
@@ -550,12 +592,16 @@
 </ul>
 <h2 id="create-a-new-kind-cluster">Create a new KIND cluster</h2>
 <p>If you already have a <code>kind</code> cluster you can skip this step.
-Also, if you'd like to use Kubernetes on a cloud like EKS on AWS, you can also skip this step.</p>
+Also, if you'd like to use Kubernetes on a cloud like EKS on AWS, you can skip this step as well.</p>
 <p>To create a new <code>kind</code> cluster, please install <code>kind</code> CLI and run the following command.</p>
 <pre><code class="language-shell">kind create cluster
 </code></pre>
 <h2 id="install-argo-cd">Install Argo CD</h2>
-<p>We use the official Argo CD instructions to install Argo CD. You could skip this step, if you already have Argo CD v2.2.8 installed. It's the non-HA installation. Please refer to the Argo CD documentation for the HA installation which is not covered by this tutorial.</p>
+<p>We use the official Argo CD instructions to install Argo CD. If you already have Argo CD v2.2.8 installed, you can skip this step. 
+The installation here is the non-HA one. Please refer to the Argo CD documentation for the HA installation which is not covered by this tutorial.</p>
+<blockquote>
+<p>⭐⭐ You can also skip this step if you choose to install Flux Subsystem for Argo from scratch (see: <strong>Option 3</strong>) ⭐⭐</p>
+</blockquote>
 <pre><code class="language-shell">kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.2.8/manifests/install.yaml
 </code></pre>
@@ -578,7 +624,11 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2
 <p>With this option, you don't need any existing Argo CD installation.</p>
 <pre><code class="language-shell">kubectl create ns argocd
 kubectl -n argocd apply -k https://github.com/flux-subsystem-argo/flamingo//release?ref=${FSA_VERSION}
-
+</code></pre>
+<h3 id="install-flux">Install Flux</h3>
+<p>After installing FSA, now we install Flux into the cluster, simply by running the following commands.</p>
+<pre><code class="language-shell">brew install fluxcd/tap/flux
+flux install
 </code></pre>
 <h3 id="login-to-argo-cd-ui">Login to Argo CD UI</h3>
 <p>For a fresh Argo CD or FSA installation, you would find your initial admin password by running this command.</p>
@@ -589,7 +639,74 @@ kubectl -n argocd apply -k https://github.com/flux-subsystem-argo/flamingo//rele
 </code></pre>
 <h2 id="install-weave-gitops-terraform-controller">Install Weave GitOps Terraform Controller</h2>
 <p><strong>Weave GitOps Terraform Controller</strong> can be installed using its Helm chart. Now we have Flux Subsystem for Argo installed, we'll install a Helm chart via FSA.</p>
-<p>Nothing special, just check additional 2 check boxes and you are good to go. With FSA, your Argo CD UI will have 2 additional check boxes, ☑️ <strong>Use Flux Subsystem</strong>, and ☑️ <strong>Auto-Create Flux Resources</strong>.</p>
+<blockquote>
+<p>⭐⭐ What is the difference between installation of a Helm chart with Argo CD and with FSA?
+Argo CD uses <code>helm template</code> then <code>kubectl apply</code> to install Helm charts. With this incomplete Helm support, 
+sometime Helm chart installations are broken.
+FSA, on the other hand, installs Helm charts via the official Helm SDK built into the Flux's Helm controller, 
+which provides the more robust Helm support. ⭐⭐</p>
+</blockquote>
+<p>With FSA, your Argo CD UI will have 2 additional check boxes, ☑️ <strong>Use Flux Subsystem</strong>, and ☑️ <strong>Auto-Create Flux Resources</strong>. To make FSA work correctly, ☑️ <strong>Apply Out Of Sync Only</strong> is also required.</p>
+<p><img alt="3 check boxes for FSA" src="../terraform_1.png" /></p>
+<p>FSA does not change the way you work with Argo CD UI, just fill the Repository URL with <code>https://weaveworks.github.io/tf-controller</code>, specify the chart name <code>tf-controller</code> and choose the chart version which is <code>0.2.6</code>.</p>
+<p><img alt="rest of the settings" src="../terraform_2.png" /></p>
+<p>Let's review values we need here.</p>
+<ul>
+<li>Application Name: <strong>tf-controller</strong></li>
+<li>Project: <strong>default</strong></li>
+<li>Sync Policy: <strong>Manual</strong></li>
+<li>Sync Options: <ul>
+<li>☑️ <strong>Apply Out Of Sync Only</strong></li>
+<li>☑️ <strong>Use Flux Subsystem</strong></li>
+<li>☑️ <strong>Auto-Create Flux Resources</strong></li>
+</ul>
+</li>
+<li>Repository URL: <strong>https://weaveworks.github.io/tf-controller</strong></li>
+<li>Chart: <strong>tf-controller</strong></li>
+<li>Cluster URL: <strong>https://kubernetes.default.svc</strong></li>
+<li>Namespace: <strong>flux-system</strong></li>
+</ul>
+<p>After review, please make sure that you check all 3 check boxes before click the "Create" button, and you are good to go.</p>
+<p><img alt="tf-controller graph" src="../terraform_3.png" /></p>
+<h2 id="connect-to-a-terraform-gitops-repo">Connect to a Terraform GitOps repo</h2>
+<p>Now Weave TF-controller is installed and ready to use for GitOpsifying our Terraform resources.</p>
+<p>To make it easy for everyone, we'll use a simple hello world Terraform file, which does not require any credentials, in this tutorial. This hello world Terraform is in the Git repository, which already contains everything. What you need to do is to fork the provided repository, create a new Flux Subsystem App in Argo CD, and done.</p>
+<p>Let's start.</p>
+<ul>
+<li>Fork <code>https://github.com/flux-subsystem-argo/tf-controller-helloworld</code> to your GitHub account.</li>
+<li>Edit <code>./infra/setup.yaml</code>, change the URL to your repository.</li>
+</ul>
+<p>Now it's time to create an App to manage our Terraform resource with Flux Subsystem for Argo.
+Please use the following configuration for the new App (<code>helloworld</code>)</p>
+<ul>
+<li>Application Name: <strong>helloworld</strong></li>
+<li>Project: <strong>default</strong></li>
+<li>Sync Policy: <strong>Manual</strong></li>
+<li>Sync Options: <ul>
+<li>☑️ <strong>Auto-Create Namespace</strong></li>
+<li>☑️ <strong>Apply Out Of Sync Only</strong></li>
+<li>☑️ <strong>Use Flux Subsystem</strong></li>
+<li>☑️ <strong>Auto-Create Flux Resources</strong></li>
+</ul>
+</li>
+<li>Repository URL: <strong>https://github.com/YOUR-GITHUB-ACCOUNT/tf-controller-helloworld</strong></li>
+<li>Path: <strong>./infra</strong></li>
+<li>Cluster URL: <strong>https://kubernetes.default.svc</strong></li>
+<li>Namespace: <strong>dev</strong></li>
+</ul>
+<p>After create the App, press Sync button once and wait. You could also press Refresh to see if the graph already there.
+If everything is correct, you would get something like the following screenshot, with a nice Terraform icon!!</p>
+<p><img alt="terraform-helloworld graph" src="../terraform_4.png" /></p>
+<p>What did this <code>main.tf</code> do? This Terraform file did not provision anything, expect an output, 
+which you might see that it was written into a Secret named <code>helloworld-outputs</code>, also shown in the graph.</p>
+<p>What's inside that output secrets, here's the command to help you find out.</p>
+<pre><code class="language-shell">kubectl -n dev get secret helloworld-outputs -o jsonpath=&quot;{.data.hello_world}&quot; | base64 -d; echo
+</code></pre>
+<h2 id="summary">Summary</h2>
+<p><strong>Flux Subsystem for Argo</strong> brings Terrform to your Argo CD UI. Not only TF-controller, you can virtually use any Flux features
+side-by-side with your Argo CD.</p>
+<p>What's next? You can now try provisioning your own Terraform resources by tweaking the <code>main.tf</code> file. Commit and push to see the change.
+Flux Subsystem for Argo is currently a Technology Preview. Feedback really welcome to help improve it. This project aims at simplifying anyone DevOps journey, improving DevOps pipelines by the best GitOps technologies available.</p>
 
               
             </article>

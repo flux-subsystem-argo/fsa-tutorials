@@ -2,11 +2,11 @@
 
 > ⏲️ Estimated time use: *12 minutes*.
 
-This is a tutorial to show how could we use **Flux Subsystem for Argo** to bring a Terraform manage feature from the Flux world to your **Argo CD** UI. In order to do so, we need [Weave GitOps Terraform Controller](https://github.com/weaveworks/tf-controller) to help us reconcile our Terraform resources.
+This is a tutorial to show how could we use **Flux Subsystem for Argo** (FSA) to bring the Terraform management feature from **the Flux world** to your **Argo CD** UI. In order to do so, we need [Weave GitOps Terraform Controller](https://github.com/weaveworks/tf-controller) to help us reconcile our Terraform resources.
 
 ## What is Weave GitOps Terraform Controller?
 
-**Weave GitOps Terraform Controller** aka **Weave TF-controller** is a Kubernetes controller that allows you to GitOpsify Terraform resources without rewriting them to YAML files. We can use Weave TF-controller in any GitOps environment managed by Flux or Argo CD. In case of this tutorial, We use FSA to help bring Weave TF-controller to Argo CD.
+**Weave GitOps Terraform Controller** aka **Weave TF-controller** is a Kubernetes controller that allows us to GitOpsify Terraform resources without rewriting them to YAML files. We can use Weave TF-controller in any GitOps environment managed by Flux or Argo CD. In this tutorial, we use FSA to bring Weave TF-controller to Argo CD.
 
 ## Tools used in this tutorial
 

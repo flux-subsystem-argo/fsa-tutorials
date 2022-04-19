@@ -163,6 +163,7 @@ Please use the following configuration for the new App (`helloworld`)
   	- ☑️ **Use Flux Subsystem**
   	- ☑️ **Auto-Create Flux Resources**
   * Repository URL: **https://github.com/YOUR-GITHUB-ACCOUNT/tf-controller-helloworld**
+  * Revision: **main**
   * Path: **./infra**
   * Cluster URL: **https://kubernetes.default.svc**
   * Namespace: **dev**

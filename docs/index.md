@@ -1,6 +1,6 @@
 # Introduction
 
-FSA (aka Flamingo) is Flux Subsystem for Argo. FSA's container image can be used as a drop-in replacement for the equivalent ArgoCD version to visualize, and manage Flux workloads, alongside ArgoCD.
+FSA (aka Flamingo) is Flux Subsystem for Argo. FSA's container image can be used as a drop-in replacement for the equivalent Argo CD version to visualize, and manage Flux workloads, alongside Argo CD.
 
 ## How does it work?
 
@@ -8,16 +8,16 @@ FSA (aka Flamingo) is Flux Subsystem for Argo. FSA's container image can be used
 
 ## Getting Started with a Fresh KIND cluster
 
-In this getting started guide, you'll be walked through steps to prepare your ultimate GitOps environment using ArgoCD and Flux.
-We'll bootstrap everything, including installation of ArgoCD, from this public repo. So no manual step of ArgoCD installation is required.
+In this getting started guide, you'll be walked through steps to prepare your ultimate GitOps environment using Argo CD and Flux.
+We'll bootstrap everything, including installation of Argo CD, from this public repo. So no manual step of Argo CD installation is required.
 In case you're forking this repo and change its visibility to private, you will be required to setup a Secret to authenticate your Git repo.
 
-At the end of this guide, you'll have Flux running alongside ArgoCD locally on your KIND cluster. You'll run FSA in the anonymous mode, and see 2 pre-defined ArgoCD Applications, each of which points to its equivalent Flux Kustomization.
+At the end of this guide, you'll have Flux running alongside Argo CD locally on your KIND cluster. You'll run FSA in the anonymous mode, and see 2 pre-defined Argo CD Applications, each of which points to its equivalent Flux Kustomization.
 
 Install CLIs
 - [KIND cli](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) 
 - [Flux cli](https://fluxcd.io/docs/cmd/)
-- [ArgoCD cli](https://argo-cd.readthedocs.io/en/stable/cli_installation/)
+- [Argo CD cli](https://argo-cd.readthedocs.io/en/stable/cli_installation/)
 
 Example install in macOS or Linux via [homebrew](https://brew.sh/)
 
@@ -28,7 +28,7 @@ brew install kind
 # install Flux CLI
 brew install fluxcd/tap/flux
 
-# install ArgoCD CLI
+# install Argo CD CLI
 brew install argocd
 
 ```
@@ -46,12 +46,9 @@ flux install
 
 ```
 
-You can check the Flux namespace (`flux-system`) for running pods `kubectl get pods -n flux-system`
+You can check the Flux namespace (`flux-system`) for running pods `kubectl get pods -n flux-system`.
 
-![image](./images/kubectl-get-ns-flux-system.png)
-
-
-Copy, and paste this snippet to bootstrap the demo.
+After Pods are ready, then you can copy, and paste this snippet to bootstrap the demo.
 
 ```shell
 cat <<EOF | kubectl apply -f -
@@ -83,11 +80,7 @@ spec:
 EOF
 ```
 
-Check ArgoCD pods are running and Ready `kubectl get -n argocd pods`
-
-![image](./images/argocd-pods-ready.png)
-
-
+You can check Argo CD pods are running and Ready `kubectl get -n argocd pods`.
 Finally, port forward and open your browser to http://localhost:8080
 
 ```

@@ -238,9 +238,47 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Introduction
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="." class="md-nav__link md-nav__link--active">
         Introduction
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-does-it-work" class="md-nav__link">
+    How does it work?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started-with-a-fresh-kind-cluster" class="md-nav__link">
+    Getting Started with a Fresh KIND cluster
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -328,6 +366,28 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-does-it-work" class="md-nav__link">
+    How does it work?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started-with-a-fresh-kind-cluster" class="md-nav__link">
+    Getting Started with a Fresh KIND cluster
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -345,7 +405,75 @@
 
 
 <h1 id="introduction">Introduction</h1>
-<p>Flux Subsystem for Argo</p>
+<p>FSA (aka Flamingo) is Flux Subsystem for Argo. FSA's container image can be used as a drop-in replacement for the equivalent ArgoCD version to visualize, and manage Flux workloads, alongside ArgoCD.</p>
+<h2 id="how-does-it-work">How does it work?</h2>
+<p><img alt="FSA (2)" src="https://user-images.githubusercontent.com/10666/159503288-5faeda59-8b54-40f0-95ca-b46c22742e30.png" /></p>
+<h2 id="getting-started-with-a-fresh-kind-cluster">Getting Started with a Fresh KIND cluster</h2>
+<p>In this getting started guide, you'll be walked through steps to prepare your ultimate GitOps environment using ArgoCD and Flux.
+We'll bootstrap everything, including installation of ArgoCD, from this public repo. So no manual step of ArgoCD installation is required.
+In case you're forking this repo and change its visibility to private, you will be required to setup a Secret to authenticate your Git repo.</p>
+<p>At the end of this guide, you'll have Flux running alongside ArgoCD locally on your KIND cluster. You'll run FSA in the anonymous mode, and see 2 pre-defined ArgoCD Applications, each of which points to its equivalent Flux Kustomization.</p>
+<p>Install CLIs
+- <a href="https://kind.sigs.k8s.io/docs/user/quick-start/#installation">KIND cli</a> 
+- <a href="https://fluxcd.io/docs/cmd/">Flux cli</a>
+- <a href="https://argo-cd.readthedocs.io/en/stable/cli_installation/">ArgoCD cli</a></p>
+<p>Example install in macOS or Linux via <a href="https://brew.sh/">homebrew</a></p>
+<pre><code class="language-shell"># install KIND cli
+brew install kind
+
+# install Flux CLI
+brew install fluxcd/tap/flux
+
+# install ArgoCD CLI
+brew install argocd
+
+</code></pre>
+<p>Create a fresh KIND cluster</p>
+<pre><code class="language-shell">kind create cluster
+</code></pre>
+<p>Install <strong>Flux</strong></p>
+<pre><code class="language-shell">flux install
+
+</code></pre>
+<p>You can check the Flux namespace (<code>flux-system</code>) for running pods <code>kubectl get pods -n flux-system</code></p>
+<p><img alt="image" src="./images/kubectl-get-ns-flux-system.png" /></p>
+<p>Copy, and paste this snippet to bootstrap the demo.</p>
+<pre><code class="language-shell">cat &lt;&lt;EOF | kubectl apply -f -
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
+metadata:
+  name: fsa-demo
+  namespace: flux-system
+spec:
+  interval: 30s
+  url: oci://ghcr.io/flux-subsystem-argo/flamingo/manifests
+  ref:
+    tag: latest
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: fsa-demo
+  namespace: flux-system
+spec:
+  prune: true
+  interval: 2m
+  path: &quot;./demo&quot;
+  sourceRef:
+    kind: OCIRepository
+    name: fsa-demo
+  timeout: 3m
+EOF
+</code></pre>
+<p>Check ArgoCD pods are running and Ready <code>kubectl get -n argocd pods</code></p>
+<p><img alt="image" src="./images/argocd-pods-ready.png" /></p>
+<p>Finally, port forward and open your browser to http://localhost:8080</p>
+<pre><code>kubectl -n argocd port-forward svc/argocd-server 8080:443
+</code></pre>
+<p>You'll find 2 FSA Applications, each of which consists of 1 Flux's Kustomization and 1 Flux's GitRepository.</p>
+<p><img alt="image" src="https://user-images.githubusercontent.com/10666/161395963-bbabbd72-03f5-4cef-b16d-346afd0eb1fc.png" /></p>
+<p><img alt="image" src="https://user-images.githubusercontent.com/10666/161396000-0282f538-88a9-4449-8501-6d7b3a64f2a6.png" /></p>
 
 
 

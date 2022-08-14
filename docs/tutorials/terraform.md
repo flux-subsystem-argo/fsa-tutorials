@@ -13,10 +13,10 @@ This is a tutorial to show how could we use **Flux Subsystem for Argo** (FSA) to
 We use the following tools in this tutorial.
 
   * A Kubernetes cluster. EKS on AWS, or `kind` on your desktop.
-  * Argo CD **v2.2.8**
-  * Flux v2 **0.28.5**
-  * Flux Subsystem for Argo **FL.1**
-  * Weave GitOps Terraform Controller **v0.9.3 or later**
+  * Argo CD **v2.2.12**
+  * Flux v2 **0.32.0**
+  * Flux Subsystem for Argo **FL.2**
+  * Weave GitOps Terraform Controller **v0.11.0 or later**
   * `kubectl`
   * `kustomize`
   * `yq` (optional)
@@ -41,15 +41,15 @@ The installation here is the non-HA one. Please refer to the Argo CD documentati
 
 ```shell
 kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.2.8/manifests/install.yaml
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.2.12/manifests/install.yaml
 ```
 
 ## Install Flux Subsystem for Argo
 
-At your terminal, please set `FSA_VERSION` variable to a specific version of Flux Subsystem for Argo you'd like to install. In this tutorial, we use `v2.2.8-fl.1-main-305be5e6`.
+At your terminal, please set `FSA_VERSION` variable to a specific version of Flux Subsystem for Argo you'd like to install. In this tutorial, we use `v2.2.12-fl.2-main-a5a71f34`.
 
 ```shell
-export FSA_VERSION=v2.2.8-fl.1-main-305be5e6
+export FSA_VERSION=v2.2.12-fl.2-main-a5a71f34
 ```
 
 There are many options to install **Flux Subsystem for Argo**. Please choose **one of the followings** to upgrade your existing Argo CD to FSA, replace the current Argo CD instalation with FSA, or install FSA from scratch.

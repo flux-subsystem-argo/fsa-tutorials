@@ -2,7 +2,7 @@
 
 > ⏲️ Estimated time use: *12 minutes*.
 
-This is a tutorial to show how could we use **Flux Subsystem for Argo** (FSA) to bring the Terraform management feature from **the Flux world** to your **Argo CD** UI. In order to do so, we need [Weave GitOps Terraform Controller](https://github.com/weaveworks/tf-controller) to help us reconcile our Terraform resources.
+This is a tutorial to show how could we use **Flamingo** (which is Flux Subsystem for Argo) to bring the Terraform management feature from **the Flux world** to your **Argo CD** UI. In order to do so, we need [Weave GitOps Terraform Controller](https://github.com/weaveworks/tf-controller) to help us reconcile our Terraform resources.
 
 ## What is Weave GitOps Terraform Controller?
 
@@ -13,10 +13,10 @@ This is a tutorial to show how could we use **Flux Subsystem for Argo** (FSA) to
 We use the following tools in this tutorial.
 
   * A Kubernetes cluster. EKS on AWS, or `kind` on your desktop.
-  * Argo CD **v2.2.12**
-  * Flux v2 **0.32.0**
-  * Flux Subsystem for Argo **FL.2**
-  * Weave GitOps Terraform Controller **v0.11.0 or later**
+  * Argo CD **v2.6.x**
+  * Flux v2 **0.41.x**
+  * Flux Subsystem for Argo **FL.4**
+  * Weave GitOps Terraform Controller **v0.14.0 or later**
   * `kubectl`
   * `kustomize`
   * `yq` (optional)
@@ -41,15 +41,15 @@ The installation here is the non-HA one. Please refer to the Argo CD documentati
 
 ```shell
 kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.2.12/manifests/install.yaml
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.6.6/manifests/install.yaml
 ```
 
 ## Install Flux Subsystem for Argo
 
-At your terminal, please set `FSA_VERSION` variable to a specific version of Flux Subsystem for Argo you'd like to install. In this tutorial, we use `v2.2.12-fl.2-main-a5a71f34`.
+At your terminal, please set `FSA_VERSION` variable to a specific version of Flux Subsystem for Argo you'd like to install. In this tutorial, we use `v2.6.6-fl.4-main-0d5eae51`.
 
 ```shell
-export FSA_VERSION=v2.2.12-fl.2-main-a5a71f34
+export FSA_VERSION=v2.6.6-fl.4-main-0d5eae51
 ```
 
 There are many options to install **Flux Subsystem for Argo**. Please choose **one of the followings** to upgrade your existing Argo CD to FSA, replace the current Argo CD instalation with FSA, or install FSA from scratch.
@@ -118,7 +118,7 @@ With FSA, your Argo CD UI will have 2 additional check boxes, ☑️ **Use Flux 
 
 ![3 check boxes for FSA](terraform_1.png)
 
-FSA does not change the way you work with Argo CD UI, just fill the Repository URL with `https://weaveworks.github.io/tf-controller`, specify the chart name `tf-controller` and choose the chart version which is `0.2.6`.
+FSA does not change the way you work with Argo CD UI, just fill the Repository URL with `https://weaveworks.github.io/tf-controller`, specify the chart name `tf-controller` and choose the chart version which is `0.11.0`.
 
 ![rest of the settings](terraform_2.png)
 

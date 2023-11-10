@@ -1,10 +1,111 @@
 # Introduction
 
-FSA (aka Flamingo) is Flux Subsystem for Argo. FSA's container image can be used as a drop-in replacement for the equivalent Argo CD version to visualize, and manage Flux workloads, alongside Argo CD.
+Flamingo is the **Flux Subsystem for Argo** (FSA). Flamingo's container image can be used as a drop-in extension for the equivalent ArgoCD version to visualize, and manage Flux workloads, alongside ArgoCD. You can also ensure that upstream CVEs in Argo CD are quickly backported to Flamingo, maintaining a secure and stable environment.
+
+## Why use Flamingo?
+
+Flamingo is a tool that combines Flux and Argo CD to provide the best of both worlds for implementing GitOps on Kubernetes clusters. With Flamingo, you can:
+
+1. Automate the deployment of your applications to Kubernetes clusters and benefit from the improved collaboration and deployment speed and reliability that GitOps offers.
+
+2. Enjoy a seamless and integrated experience for managing deployments, with the automation capabilities of Flux embedded inside the user-friendly interface of Argo CD.
+
+3. Take advantage of additional features and capabilities that are not available in either Flux or Argo CD individually, such as the robust Helm support from Flux, Flux OCI Repository, Weave GitOps Terraform Controller for Infrastructure as Code, Weave Policy Engine, or Argo CD ApplicationSet for Flux-managed resources.
 
 ## How does it work?
 
 ![FSA (2)](https://user-images.githubusercontent.com/10666/159503288-5faeda59-8b54-40f0-95ca-b46c22742e30.png)
+
+## Getting Started with Flamingo CLI
+
+Flamingo CLI is the recommended way to install Flamingo for production use.
+
+This guide will provide a step-by-step process for setting up a GitOps environment using Flux and ArgoCD, via Flamingo. By the end of this guide, you will have Flamingo running on your cluster. You will create a podinfo application with a Flux Kustomization, and generate a Flamingo app from this Flux object.
+
+### Install CLIs
+
+You can install required CLI via Homebrew.
+
+```shell
+# install Flux CLI
+brew install fluxcd/tap/flux
+
+# install Flamingo CLI
+brew install flux-subsystem-argo/tap/flamingo
+```
+
+### Install Flux
+
+```shell
+flux install
+```
+
+### Install Flamingo
+```shell
+flamingo install
+
+# or with a specific Flamingo version
+flamingo install --version=v2.8.6
+```
+
+### Create a Podinfo Flux Kustomization
+
+```yaml
+cat << EOF | kubectl apply -f -
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: podinfo-kustomize
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
+metadata:
+  name: podinfo
+  namespace: podinfo-kustomize
+spec:
+  interval: 10m
+  url: oci://ghcr.io/stefanprodan/manifests/podinfo
+  ref:
+    tag: latest
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: podinfo
+  namespace: podinfo-kustomize
+spec:
+  interval: 10m
+  targetNamespace: podinfo-kustomize
+  prune: true
+  sourceRef:
+    kind: OCIRepository
+    name: podinfo
+  path: ./
+EOF
+```
+
+### Generate App to view the Podinfo KS
+
+```shell
+flamingo generate-app \
+  --app-name=podinfo-ks \
+  -n podinfo-kustomize ks/podinfo
+```
+
+### Login to the Flamingo UI
+
+Like a normal Argo CD instance, please firstly obtain the initial password by running the following command to login. The default username is `admin`.
+
+```shell
+flamingo show-init-password
+```
+
+After that you can port forward and open your browser to http://localhost:8080
+
+```shell
+kubectl -n argocd port-forward svc/argocd-server 8080:443
+```
 
 ## Getting Started with a Fresh KIND cluster
 
